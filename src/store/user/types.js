@@ -1,0 +1,12 @@
+export const FETCH_USERS = "user/FETCH_USERS";
+export const SET_USERS = "user/SET_USERS";
+export const GET_USERS = "user/GET_USERS";
+export const UPDATE_USER = "user/UPDATE_USER";
+export const DELETE_USER = "user/DELETE_USER";
+export const GET_USER = "user/GET_USER";
+export const SET_USER = "user/SET_USER";
+export const SHOW_USER = "user/SHOW_USER";
+export const CREATE_USER = "user/CREATE_USER";
+export const TOKEN_VALIDATION ='user/TOKEN_VALIDATION';
+export const REFRESH_TOKEN ='user/REFRESH_TOKEN';
+export const GET_USER_TOKEN_EXP = 'user/GET_USER_TOKEN_EXP';

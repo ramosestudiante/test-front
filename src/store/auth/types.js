@@ -1,0 +1,11 @@
+export const SET_PROFILE = "auth/SET_PROFILE";
+export const FETCH_AUTH = "auth/FETCH_AUTH";
+export const LOG_IN = "auth/LOG_IN";
+export const GET_LOGGED_USER = "auth/GET_LOGGED_USER";
+export const REGISTER = "auth/REGISTER";
+export const IS_LOGGED_IN = "auth/IS_LOGGED_IN";
+export const SET_LOGGED_IN = "auth/SET_LOGGED_IN";
+export const ISLOGIN = "auth/ISLOGIN";
+export const LOG_OUT = "auth/LOG_OUT";
+export const GET_LOGGED_USER_TYPE = "auth/GET_LOGGED_USER_TYPE";
+export const GET_TYPE_LOGGED = "auth/GET_TYPE_LOGGED";
