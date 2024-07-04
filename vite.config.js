@@ -10,8 +10,8 @@ dotenv.config();
 const baseUrl = process.env.VITE_SERVER_URL_LOCAL || "http://localhost:8000";
 
 const port = process.env.PORT || 4000;
-// const host = '0.0.0.0'
-const host = 'localhost';
+const host = '0.0.0.0'
+// const host = 'localhost';
 
 export default defineConfig({
   plugins: [
