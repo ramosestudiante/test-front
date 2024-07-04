@@ -60,6 +60,7 @@
           maxlength="12"
           placeholder="Ingresa tu rut"
           @blur="handleBlur('rut')"
+          @input="clearUpdateErrorMessage"
           :class="{ 'border-red-500': form.touched.rut && form.errors.rut }"
         />
 
@@ -181,6 +182,7 @@
         />
       </div>
 
+
       <div class="w-full flex items-center justify-between mt-10">
         <router-link
           :to="{name:'Welcome'}"
@@ -216,6 +218,7 @@ import { REGISTER } from "../../store/types";
 import validateEmail from "../../utils/emailValidator";
 import cookieHandler from '../../utils/helpers/cookie.handler';
 
+
 const router = useRouter();
 const store = useStore();
 
@@ -243,6 +246,8 @@ const form = reactive({
     password: false,
   },
 });
+const register_error_message = ref("");
+
 const loading = ref(false);
 
 const formatRuts = () => {
@@ -258,6 +263,14 @@ const handleBlur = (field) => {
   form.touched[field] = true;
   form.errors[field] = validateField(field);
 };
+
+const clearUpdateErrorMessage = () => {
+  if (form.errors.rut) {
+    loading.value = false; 
+    register_error_message.value=""; // Limpiar el mensaje de error de la API
+  }
+};
+
 
 const validateField = (field) => {
   if (field === "name") {
@@ -276,6 +289,14 @@ const validateField = (field) => {
   if (field === "rut") {
     if (!form.rut) {
       return "Ingrese rut";
+    }
+    if(!rutHelper.validateRut(form.rut)){
+      return "rut no valido"
+    }
+
+    if(register_error_message.value && register_error_message.value?.rut[0].toLowerCase().includes('rut')){
+      loading.value = true; 
+      return register_error_message.value?.rut[0];
     }
   }
   if (field === "birthday") {
@@ -321,10 +342,9 @@ watchEffect(() => {
   form.errors.password = validateField("password");
 });
 
-const login_error_message = ref("");
 
 const formRegister = async () => {
-  login_error_message.value = "";
+  register_error_message.value = "";
 
   loading.value = true;
   try {
@@ -362,13 +382,14 @@ const formRegister = async () => {
       router.push({ name: "Dashboard" });
     }
   } catch (error) {
+   
+      register_error_message.value = error.response?.data?.error;
+      loading.value=false;
+
     if (error.response === undefined) {
-      login_error_message.value =
+      register_error_message.value =
         "Ocurrió un error inesperado, vuelve a intentarlo más tarde.";
-    } else {
-      login_error_message.value =
-        "Las credenciales ingresadas son incorrectas.";
-    }
+    } 
   }
   loading.value = false;
 };

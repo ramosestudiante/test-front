@@ -27,26 +27,73 @@
         />
       </div>
 
-      <div>
-        <InputLabel for="password" value="Password" />
+      <div class="mt-4">
+        <InputLabel for="password" value="Contraseña" />
 
-        <TextInput
-          id="password"
-          type="password"
-          class="mt-1 block w-full"
-          v-model="form.password"
-          @blur="handleBlur('password')"
-          :class="{
-            'border-red-500': form.touched.password && form.errors.password,
-          }"
-          placeholder="Ingresa tu contraseña"
-        />
+        <div class="relative">
+          <input
+            id="password"
+            :type="showPassword ? 'text' : 'password'"
+            class="mt-1 block w-full pr-10 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            v-model="form.password"
+            required
+            autocomplete="new-password"
+            placeholder="Ingresa una contraseña"
+            @blur="handleBlur('password')"
+            :class="{
+              'border-red-500': form.touched.password && form.errors.password,
+            }"
+          />
+          <button
+            type="button"
+            @click="togglePasswordVisibility"
+            class="absolute inset-y-0 right-0 px-3 py-2 text-gray-400 focus:outline-none"
+          >
+            <svg
+              v-if="showPassword"
+              class="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15.536 8.464a4 4 0 00-5.072 5.072M3 3l18 18"
+              />
+            </svg>
+            <svg
+              v-else
+              class="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15.536 8.464a4 4 0 00-5.072 5.072M3 3l18 18"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M18.364 5.636a8 8 0 00-11.314 11.314M15.536 8.464L18.364 5.636M5.636 18.364L8.464 15.536"
+              />
+            </svg>
+          </button>
+        </div>
 
         <InputError
           class="mt-2"
           :message="form.touched.password ? form.errors.password : ''"
         />
       </div>
+
       <InputError
           class="mt-2"
           :message="login_error_message ? login_error_message : ''"
@@ -67,7 +114,6 @@
         </router-link>
       </div>
       <div class="flex items-center justify-between">
-        <!-- TODO -->
         <router-link
           :to="{name:'Welcome'}"
           class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -123,6 +169,12 @@ const form = reactive({
 });
 
 const form_ref = ref("");
+
+const showPassword = ref(false);
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value;
+};
 
 const handleBlur = (field) => {
   form.touched[field] = true;
