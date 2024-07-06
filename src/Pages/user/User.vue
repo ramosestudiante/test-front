@@ -23,7 +23,6 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
 import { SHOW_USER } from "../../store/types";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";

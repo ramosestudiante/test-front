@@ -87,7 +87,7 @@
               disabled
             />
           </div>
-       </form>
+        </form>
       </div>
     </div>
   </div>
@@ -122,34 +122,18 @@ const form = ref({
   address: user.value?.address,
   typeuser: mapRoleIdToUserType(user.value?.role_id),
 });
-const id = computed(()=>route.params.id);
+const id = computed(() => route.params.id);
 
 onMounted(async () => {
- 
-  // const id = route.params.id;
-  // await store.dispatch(SHOW_USER, id);
-  // const userData = store.getters[GET_USER];
-  // form.value.name = userData?.name;
-  // form.value.email = userData?.email;
-  // form.value.rut = userData?.rut;
-  // form.value.birthday = userData?.birthday
-  //   ? formatDate(userData?.birthday)
-  //   : "";
-  // form.value.address = userData?.address;
-  // form.value.typeuser = mapRoleIdToUserType(userData?.role_id);
-
-        await store.dispatch(SHOW_USER, id.value);
-        const userData = store.getters[GET_USER];
-        form.value.name = userData?.name;
-        form.value.email = userData?.email;
-        form.value.rut = userData?.rut;
-        form.value.birthday = userData?.birthday
-          ? formatDate(userData?.birthday)
-          : "";
-        form.value.address = userData?.address;
-        form.value.typeuser = mapRoleIdToUserType(userData?.role_id);
-      
-
+  await store.dispatch(SHOW_USER, id.value);
+  const userData = store.getters[GET_USER];
+  form.value.name = userData?.name;
+  form.value.email = userData?.email;
+  form.value.rut = userData?.rut;
+  form.value.birthday = userData?.birthday
+    ? formatDate(userData?.birthday)
+    : "";
+  form.value.address = userData?.address;
+  form.value.typeuser = mapRoleIdToUserType(userData?.role_id);
 });
-
 </script>

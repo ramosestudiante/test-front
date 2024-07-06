@@ -7,8 +7,7 @@
         <input
           id="searchInput"
           type="text"
-          v-model="searchQuery"
-          @input="performSearch"
+          v-model="localSearchQuery"
           placeholder="Search..."
           class="border rounded-lg py-2 px-4"
           style="max-width: 10rem"
@@ -83,7 +82,7 @@
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <tr v-for="user in filter" :key="user.id">
+        <tr v-for="user in users" :key="user.id">
           <td
             v-for="(field, index) in fields"
             :key="index"
@@ -120,16 +119,20 @@ import { useStore } from "vuex";
 import ModalUpdate from "./user/ModalUpdate.vue";
 import Modal from "./Modal.vue";
 import PaginationVue from "./user/Pagination.vue";
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   tableData: Object,
+  searchQuery: String
 });
 
 const store = useStore();
 const typeUser = computed(() => store.getters[GET_TYPE_LOGGED]);
-const emit = defineEmits(["updatePage"]);
-const searchQuery = ref("");
+const emit = defineEmits(["updatePage","update:searchQuery"]);
 const currentPage = ref(1);
+const route = useRoute();
+const router = useRouter();
+const localSearchQuery = ref(props.searchQuery);
 
 const columns = ["Nombre", "Email", "Rut", "Fecha de Nacimiento", "Dirección"];
 const columnsAdmin = [
@@ -162,20 +165,32 @@ const totalPages = computed(() => {
   return Math.ceil(totalUsers / usersPerPage);
 });
 
-const filter = computed(() => {
-  if (!searchQuery.value) return users.value;
-  return users.value.filter((user) =>
-    Object.values(user).some((value) =>
-      value?.toString().toLowerCase().includes(searchQuery.value.toLowerCase())
-    )
-  );
-});
+
 
 const onPageChange = (newPage)=>{
   currentPage.value = newPage;
+  const query = { ...route?.query };
+  query.page= newPage;
+  router.push({ path: route.path, query });
 }
 
 watch(currentPage, (newPage) => emit("updatePage", newPage));
+
+watch(localSearchQuery, (newValue) => {
+  emit("update:searchQuery", newValue)
+  const query = { ...route?.query };
+  query.search= newValue; // update  paráms 'search' query
+  if (newValue) {
+    query.search = newValue;
+    if (query.page) {
+      delete query.page; // Remove page parameter if it exists
+    }
+    router.push({ path: route.path, query });
+  } else {
+    const { search, ...restQuery } = query;
+    router.push({ path: route.path, query: restQuery });
+  }
+});
 
 const modalShow = ref(false);
 const create = () => {

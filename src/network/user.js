@@ -11,14 +11,12 @@ const network = (client) => ({
       'Authorization': `Bearer ${payload}`,
     },
   }),
-  allUser: (page, per_page, name, address, rut) =>
+  allUser: (page, per_page, search) =>
     client.get(`${apiUrl}/api/users`, {
       params: {
         page: page || undefined,
         per_page: per_page || undefined,
-        name: name || undefined,
-        address: address || undefined,
-        rut: rut || undefined,
+        search: search|| undefined,
       },
     }),
   deleteUser: (id) => client.delete(`${apiUrl}/api/users/${id}`),

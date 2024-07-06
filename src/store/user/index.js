@@ -51,9 +51,9 @@ store.mutations = {
 };
 
 store.actions = {
-  [FETCH_USERS]({ commit }, { page, per_page, name, address, rut }) {
+  [FETCH_USERS]({ commit }, { page, per_page, search }) {
     return new Promise((resolve, reject) => {
-      allUser(page, per_page, name, address, rut).then(
+      allUser(page, per_page, search).then(
         (resp) => {
           commit(SET_USERS, resp.data.users);
           resolve(resp.data.users);

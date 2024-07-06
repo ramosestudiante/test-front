@@ -30,6 +30,7 @@
 import { ref } from "vue";
 import { DELETE_USER, FETCH_USERS } from "../../store/types";
 import { useStore } from "vuex";
+import { useRoute, useRouter } from "vue-router";
 
 const store = useStore();
 const props = defineProps({
@@ -53,6 +54,8 @@ const props = defineProps({
   },
 });
 const loading = ref(false);
+const router = useRouter();
+const route = useRoute();
 
 const cancelDelete = () => {
   props.onClose();
@@ -65,14 +68,19 @@ const confirmDelete = async () => {
     };
 
     await store.dispatch(DELETE_USER, userId);
-    await store.dispatch(FETCH_USERS, {
+    const resp = await store.dispatch(FETCH_USERS, {
       page: props.currentPage,
       per_page: 10,
     });
+if (resp.data.length === 0 && props.currentPage > 1) {
+    router.push({ path: route.path, query: { page: props.currentPage - 1 } });
+    }
+
     loading.value = false;
     props.onClose();
   } catch (error) {
-    console.log("errorr", error);
+    console.log("Error al eliminar usuario:", error);
+    loading.value = false;
   }
 };
 </script>
