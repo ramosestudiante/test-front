@@ -124,9 +124,9 @@ store.actions = {
         });
     });
   },
-  [REFRESH_TOKEN]({_},refreshToken ){
+  [REFRESH_TOKEN]({_},payload ){
     return new Promise((resolve, reject) => {
-      tokenRefresh(refreshToken)
+      tokenRefresh(payload)
         .then((response) => {
           resolve(response);
         })

@@ -7,11 +7,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const baseUrl = process.env.VITE_SERVER_URL_LOCAL || "http://localhost:8000";
+const baseUrl = process.env.VITE_SERVER_URL_LOCAL || "http://localhost:4000";
 
-const port = process.env.PORT || 4000;
-const host = '0.0.0.0'||'localhost'
-// const host = 'localhost';
+const port = process.env.PORT || 3000;
+const host = '0.0.0.0'
 
 export default defineConfig({
   plugins: [

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import cookie from "../utils/helpers/cookie.handler";
+import cookieHandler from "../utils/helpers/cookie.handler";
 import Dashboard from "../Pages/Dashboard.vue";
 import Missing from "../Components/pageError/missing.vue";
 import Login from "../Pages/Auth/Login.vue";
@@ -7,11 +7,11 @@ import Register from "../Pages/Auth/Register.vue";
 import Welcome from "../Pages/Welcome.vue";
 import ShowUser from "../Pages/user/User.vue";
 import Inicio from "../Pages/user/Inicio.vue";
+import Maintenance from '../Components/pageError/mantencion.vue';
 
 const defaultTitle = "Test Laravel Vue";
 
 const routes = [
-  // ERROR 404
   {
     path: "/:pathMatch(.*)*",
     name: "Missing",
@@ -20,8 +20,14 @@ const routes = [
       authRequired: false,
     },
   },
-
-  // Inicio de sesión
+  {
+    path: "/mantencion",
+    name: "Maintenance",
+    component: Maintenance,
+    meta: {
+      authRequired: false,
+    }, 
+  },
   {
     path: "/login",
     name: "Login",
@@ -31,8 +37,6 @@ const routes = [
       title: defaultTitle,
     },
   },
-
-  // Registro
   {
     path: "/register",
     name: "Register",
@@ -42,8 +46,6 @@ const routes = [
       title: defaultTitle,
     },
   },
-
-  // Página de bienvenida
   {
     path: "/",
     name: "Welcome",
@@ -52,8 +54,6 @@ const routes = [
       authRequired: false,
     },
   },
-  
-  // Rutas principales protegidas
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -100,15 +100,15 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = cookie().getAccessToken();
+  const isAuthenticated = !!cookieHandler().getAccessToken();
   const requiresAuth = to.matched.some(record => record.meta.authRequired);
 
   if (requiresAuth && !isAuthenticated) {
-    next({ name: 'Login' }); // Redirect to login if not authenticated
+    next({ name: 'Login' });
   } else if (!requiresAuth && isAuthenticated && (to.name === 'Login' || to.name === 'Register')) {
-    next({ name: 'Dashboard' }); // Redirect to dashboard if authenticated and trying to access login or register
+    next({ name: 'Dashboard' });
   } else {
-    next(); // Allow normal navigation
+    next();
   }
 });
 

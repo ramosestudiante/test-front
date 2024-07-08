@@ -6,11 +6,7 @@ const apiUrl = appConfig.baseURL;
 
 const network = (client) => ({
   userLogged: () => client.get(`${apiUrl}/api/validatetoken`),
-  tokenRefresh:(payload)=>client.post(`${apiUrl}/api/refresh`,null,{
-    headers: {
-      'Authorization': `Bearer ${payload}`,
-    },
-  }),
+  tokenRefresh:(payload)=>client.post(`${apiUrl}/api/refresh`,{token:payload}),
   allUser: (page, per_page, search) =>
     client.get(`${apiUrl}/api/users`, {
       params: {

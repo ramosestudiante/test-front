@@ -14,7 +14,11 @@
         />
       </div>
       <!-- Button Create User -->
-      <button class="text-red-500" @click="create()" v-if="typeUser==='Admin'">
+      <button
+        class="text-red-500"
+        @click="create()"
+        v-if="typeUser === 'Admin'"
+      >
         <svg
           class="w-[43px] h-[43px] text-gray-800 dark:text-white"
           aria-hidden="true"
@@ -56,7 +60,31 @@
       </Modal>
     </div>
 
-    <table class="min-w-full divide-y divide-gray-200 mt-10">
+    <div v-if="loading" class="flex items-center justify-center my-4">
+      <svg
+        class="animate-spin h-5 w-5 mr-3 text-indigo-500"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A8.004 8.004 0 014 12H0c0 6.627 5.373 12 12 12v-4c-3.313 0-6.243-1.343-8.438-3.509l1.438-1.438z"
+        ></path>
+      </svg>
+      <span>Cargando...</span>
+    </div>
+    <table
+      v-if="!loading && users?.length !== 0"
+      class="min-w-full divide-y divide-gray-200 mt-10"
+    >
       <thead v-if="typeUser === 'User'">
         <tr class="bg-gray-50">
           <th
@@ -101,8 +129,15 @@
         </tr>
       </tbody>
     </table>
+    <div
+      v-if="!loading && users?.length === 0"
+      class="text-center mt-4 text-gray-500"
+    >
+      No se encontraron datos.
+    </div>
 
-     <Pagination
+    <Pagination
+      v-if="!loading && users?.length !== 0"
       :totalPages="totalPages"
       :currentPage="currentPage"
       @update:currentPage="onPageChange"
@@ -111,24 +146,25 @@
 </template>
 
 <script setup>
-import Pagination from './user/Pagination.vue';
-import {ref, computed, watch } from "vue";
+import Pagination from "./user/Pagination.vue";
+import { ref, computed, watch } from "vue";
 import dayjs from "dayjs";
 import { GET_TYPE_LOGGED } from "../store/types";
 import { useStore } from "vuex";
 import ModalUpdate from "./user/ModalUpdate.vue";
 import Modal from "./Modal.vue";
 import PaginationVue from "./user/Pagination.vue";
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
   tableData: Object,
-  searchQuery: String
+  searchQuery: String,
+  loading: Boolean,
 });
 
 const store = useStore();
 const typeUser = computed(() => store.getters[GET_TYPE_LOGGED]);
-const emit = defineEmits(["updatePage","update:searchQuery"]);
+const emit = defineEmits(["updatePage", "update:searchQuery"]);
 const currentPage = ref(1);
 const route = useRoute();
 const router = useRouter();
@@ -165,21 +201,19 @@ const totalPages = computed(() => {
   return Math.ceil(totalUsers / usersPerPage);
 });
 
-
-
-const onPageChange = (newPage)=>{
+const onPageChange = (newPage) => {
   currentPage.value = newPage;
   const query = { ...route?.query };
-  query.page= newPage;
+  query.page = newPage;
   router.push({ path: route.path, query });
-}
+};
 
 watch(currentPage, (newPage) => emit("updatePage", newPage));
 
 watch(localSearchQuery, (newValue) => {
-  emit("update:searchQuery", newValue)
+  emit("update:searchQuery", newValue);
   const query = { ...route?.query };
-  query.search= newValue; // update  paráms 'search' query
+  query.search = newValue; // update  paráms 'search' query
   if (newValue) {
     query.search = newValue;
     if (query.page) {

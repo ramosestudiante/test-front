@@ -2,7 +2,7 @@
   <div style="background-color: #fff">
     <a-row justify="center">
       <a-col :lg="14" :xl="14">
-        <img class="img-fluid" src="@/assets/images/mantención.png" alt="" />
+        <img class="img-fluid" src="" alt="" />
       </a-col>
     </a-row>
     <a-row justify="center">

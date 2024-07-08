@@ -20,13 +20,11 @@ const publicHttp = axios.create(httpConfig);
 
 const interceptor = authInterceptor(privateHttp);
 
-// Interceptor para solicitudes
 privateHttp.interceptors.request.use(
   interceptor.authRequest,
   (error) => Promise.reject(error)
 );
 
-// Interceptor para respuestas
 privateHttp.interceptors.response.use(
   (response) => response,
   interceptor.tokenResponse
@@ -46,7 +44,6 @@ export const {
   tokenRefresh,
 } = User;
 
-// Crear un objeto de red y exportarlo como predeterminado
 const network = {
   login: Auth.login,
   register: Auth.register,
