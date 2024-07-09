@@ -7,15 +7,6 @@
       @update:searchQuery="updateSearchQuery"
       :loading="loading"
     >
-      <template v-slot:create="{}">
-        <ToolsButton
-          :tableData="tableData"
-          :showUser="showUser"
-          :editUser="editUser"
-          :deleteUser="deleteUser"
-          :currentPage="currentPage"
-        />
-      </template>
       <template v-slot:tools="{ tableData, showUser, editUser, deleteUser }">
         <ToolsButton
           :tableData="tableData"
