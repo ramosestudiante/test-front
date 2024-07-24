@@ -67,7 +67,7 @@
 
         <InputError
           class="mt-2"
-          :message="form.touched.rut ? form.errors.rut:''"
+          :message="form.touched.rut ? form.errors.rut:form.errors.rut"
         />
       </div>
 
@@ -497,6 +497,7 @@ const formupdate = async () => {
         return;
       }
     }
+  
     // Normalize the RUT when sending
     const rut = rutHelper.normalizeRut(form.rut);
 
